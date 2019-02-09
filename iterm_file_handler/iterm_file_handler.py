@@ -58,7 +58,7 @@ def _get_extention(file):
 
 def _get_cli(for_file):
     try:
-        from shutil import which
+        from distutils.spawn import find_executable as which
         global cli_map
         name = cli_map.get(_get_extention(for_file), '')
         cli = (which(name, path='/usr/local/bin') or '/usr/bin/open')
