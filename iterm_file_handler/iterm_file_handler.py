@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # https://github.com/dandavison/iterm2-dwim/blob/master/iterm2_dwim/parsers/parsers.py
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 import sys, os, json
 
@@ -25,11 +25,19 @@ def _sanitize_params():
 
     config_file = os.path.expanduser('~/.iterm_file_handler.json')
 
-    if 'override' in sys.argv:
+    if any(_arg in ['-O', 'override'] for _arg in sys.argv):
         with open(config_file, "w+") as jf:
             json.dump(cli_map, jf)
         print("Config file created at '{}', Please make the changes".format(
             config_file))
+        sys.exit()
+
+    if any(_arg in ['-h', 'help'] for _arg in sys.argv):
+        # User a cli lib for parsing param
+        print('''
+        -h, help -- print help
+        -O, override -- creates json file at '~/.iterm_file_handler.json' to override defalt file handler
+        ''')
         sys.exit()
 
     if os.path.exists(config_file):
