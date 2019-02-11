@@ -20,6 +20,7 @@
 
 Add 'test' in the input as `/usr/local/bin/itfh "\1" "\2" "\5" 'test'` to generate logs at `~/.iterm_file_handler.log`. By default it will log if something goes wrong.
 
+![alt tag](iterm-setting.jpg)
 ### Credits
 - https://github.com/jgehrcke/python-cmdline-bootstrap 
 - https://github.com/fmeeuw/Iterm2-intellij
