@@ -83,7 +83,8 @@ def _run(cmd):
     if '/usr/bin/open' in cmd:
         del cmd[-1]
     else:
-        cmd[-2:] = [':'.join(cmd[-2:])]
+        # converting file_name.rb:23 to --line 23 file_name.rb
+        cmd[-2:] = ['--line',cmd[-2:][1], cmd[-2:][0]]
 
     out = subprocess.call(cmd)
     if (out is not 0) or ('test' in args):
