@@ -37,6 +37,9 @@ def _sanitize_params():
         print('''
         -h, help -- print help
         -O, override -- creates json file at '~/.iterm_file_handler.json' to override defalt file handler
+        
+        Set `/usr/local/bin/itfh "\1" "\2" "\5" 'test'` in Iterm2 settings > profile > Advandced > Run Command
+        To activate itfh
         ''')
         sys.exit()
 
