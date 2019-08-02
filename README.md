@@ -2,11 +2,12 @@
 
 ## Install
 
-1. Clone and run below command
+1. From source by clonning and running below command
     `python3 setup.py install`
-
 2. Install using pip
     `pip install iterm_file_handler`
+3. From git
+    `pip install git+https://github.com/pr4bh4sh/iterm-file-handler`
 
 ## Uses
 
