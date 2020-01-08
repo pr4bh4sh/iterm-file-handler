@@ -3,7 +3,7 @@
 # https://github.com/dandavison/iterm2-dwim/blob/master/iterm2_dwim/parsers/parsers.py
 __version__ = "0.0.3"
 
-import sys, os, json
+import sys, os, json, re
 
 global cli_map
 cli_map = {
@@ -49,6 +49,9 @@ def _sanitize_params():
 
     if ':' in sys.argv[1]:
         file, line = sys.argv[1].split(':')
+    elif 'line' in sys.argv[4]:
+        # for ruby pry session
+        file, line = sys.argv[1],re.search('line.* (\d+)',sys.argv[4]).group(1)
     else:
         file, line = sys.argv[1:3]
 
