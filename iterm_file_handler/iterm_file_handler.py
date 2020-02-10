@@ -37,7 +37,7 @@ def _sanitize_params():
         print('''
         -h, help -- print help
         -O, override -- creates json file at '~/.iterm_file_handler.json' to override defalt file handler
-        
+
         Set `/usr/local/bin/itfh "\1" "\2" "\5" 'test'` in Iterm2 settings > profile > Advandced > Run Command
         To activate itfh
         ''')
@@ -47,7 +47,9 @@ def _sanitize_params():
         with open(config_file, 'r') as jf:
             cli_map = json.load(jf)
 
-    if ':' in sys.argv[1]:
+    if sys.argv[2].isnumeric() and os.path.exists(sys.argv[1]):
+        file, line = sys.argv[1], sys.argv[2]
+    elif ':' in sys.argv[1]:
         file, line = sys.argv[1].split(':')
     elif 'line' in sys.argv[4]:
         # for ruby pry session
@@ -95,7 +97,8 @@ def _run(cmd):
     out = subprocess.call(cmd)
     if (out is not 0) or ('test' in args):
         _log('Comand created --> ' + ' '.join(cmd))
-        _log('Input passsed --> ' + str(args))
+        _log('Input passsed --> ' + str({k+1 : v for k, v in enumerate(args)}))
+        # _log('Input passsed --> ' + str(args))
 
 
 def _log(msg):
