@@ -98,6 +98,8 @@ def _run(cmd):
     if (out is not 0) or ('test' in args):
         _log('Comand created --> ' + ' '.join(cmd))
         _log('Input passsed --> ' + str({k+1 : v for k, v in enumerate(args)}))
+        _log('Command for debug --> ' + "/usr/local/bin/itfh " + ' '.join(['"{0}"'.format(x) for x in args]))
+        _log('')
         # _log('Input passsed --> ' + str(args))
 
 
