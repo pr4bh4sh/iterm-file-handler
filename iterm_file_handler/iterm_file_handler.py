@@ -9,7 +9,9 @@ global cli_map
 cli_map = {
     'java': 'idea',
     'rb': 'mine',
+    'ruby': 'mine',
     'py': 'charm',
+    'python': 'charm',
     'kt': 'studio',
     'txt': os.getenv('EDITOR', ''),
 }
@@ -45,7 +47,8 @@ def _sanitize_params():
 
     if os.path.exists(config_file):
         with open(config_file, 'r') as jf:
-            cli_map = json.load(jf)
+            cli_map.update(json.load(jf))
+
 
     if sys.argv[2].isnumeric() and os.path.exists(sys.argv[1]):
         file, line = sys.argv[1], sys.argv[2]
@@ -53,7 +56,10 @@ def _sanitize_params():
         file, line = sys.argv[1].split(':')
     elif 'line' in sys.argv[4]:
         # for ruby pry session
-        file, line = sys.argv[1],re.search('line.* (\d+)',sys.argv[4]).group(1)
+        try:
+            file, line = sys.argv[1],re.search('line.* (\d+)',sys.argv[4]).group(1)
+        except:
+            file, line = sys.argv[1], '1'
     else:
         file, line = sys.argv[1:3]
 
@@ -69,6 +75,16 @@ def _sanitize_params():
 def _get_extention(file):
     if '.' in file:
         return file.split('.')[-1]
+    elif os.path.exists(file.split(':')[0]):
+        # getting file type from shebang
+        with open(file.split(':')[0]) as f:
+            first_line = f.readline().rstrip()
+            # _log('first_line --> ' + first_line)
+            file_type = first_line.split(' ')[-1]
+            # _log('file_type --> ' + file_type)
+            return file_type
+
+
     raise RuntimeError("File extenstion not found in '{}'".format(file))
 
 
