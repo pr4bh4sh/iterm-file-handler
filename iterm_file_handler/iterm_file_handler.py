@@ -1,9 +1,11 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # https://github.com/dandavison/iterm2-dwim/blob/master/iterm2_dwim/parsers/parsers.py
 __version__ = "0.0.3"
 
 import sys, os, json, re
+
 
 global cli_map
 cli_map = {
@@ -49,11 +51,10 @@ def _sanitize_params():
         with open(config_file, 'r') as jf:
             cli_map.update(json.load(jf))
 
-
-    if sys.argv[2].isnumeric() and os.path.exists(sys.argv[1]):
-        file, line = sys.argv[1], sys.argv[2]
-    elif ':' in sys.argv[1]:
+    if ':' in sys.argv[1]:
         file, line = sys.argv[1].split(':')
+    elif sys.argv[2].isnumeric() and os.path.exists(sys.argv[1]):
+        file, line = sys.argv[1], sys.argv[2]
     elif 'line' in sys.argv[4]:
         # for ruby pry session
         try:
@@ -104,14 +105,18 @@ def _get_cli(for_file):
 def _run(cmd):
     import subprocess
     args = sys.argv[1:]
+
     if '/usr/bin/open' in cmd:
         del cmd[-1]
+        out = subprocess.call(cmd)
+    if 'mine' in cmd[0]:
+        import requests
+        out = requests.get(f"http://localhost:63342/api/file/{cmd[1]}:{cmd[2]}").status_code
     else:
         # converting file_name.rb:23 to --line 23 file_name.rb
         cmd[-2:] = ['--line',cmd[-2:][1], cmd[-2:][0]]
 
-    out = subprocess.call(cmd)
-    if (out is not 0) or ('test' in args):
+    if (out != 0 or out == 200) or ('test' in args):
         _log('Comand created --> ' + ' '.join(cmd))
         _log('Input passsed --> ' + str({k+1 : v for k, v in enumerate(args)}))
         _log('Command for debug --> ' + "/usr/local/bin/itfh " + ' '.join(['"{0}"'.format(x) for x in args]))
@@ -126,3 +131,7 @@ def _log(msg):
     time_stamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     with open(log_file, 'a') as f:
         f.write("[{}] {} \n".format(time_stamp, msg))
+
+
+if __name__ == '__main__':
+    main()
