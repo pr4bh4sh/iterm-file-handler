@@ -14,6 +14,9 @@ with open("README.md", "rb") as f:
 setup(
     name="iterm_file_handler",
     packages=["iterm_file_handler"],
+    install_requires=[
+      'requests',
+    ],
     entry_points={
         "console_scripts":
         ['itfh = iterm_file_handler.iterm_file_handler:main']
